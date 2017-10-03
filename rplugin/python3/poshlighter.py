@@ -1,5 +1,3 @@
-#!~/.venv/vim-poshlighter/bin/python3
-
 from spacy.en import English
 import neovim
 
@@ -26,15 +24,16 @@ class POSHlighter(object):
         self.vim = vim
 
     @neovim.function('Verb')
-    def verb(self, allowed_pos=None):
-        if allowed_pos is None:
+    def verb(self, allowed_pos):
+        if len(allowed_pos) == 0:
             allowed_pos = set(['verb'])
+        else:
+            allowed_pos = set(pos for pos in allowed_pos if pos in HIGHLIGHT_LINKS)
         # clear current syntax
         self.vim.command('syntax clear')
         # set up syntax highlight links
         for pos in allowed_pos:
-            if pos in HIGHLIGHT_LINKS:
-                self.vim.command('highlight link {} {}\n'.format(pos, HIGHLIGHT_LINKS[pos]))
+            self.vim.command('highlight link {} {}\n'.format(pos, HIGHLIGHT_LINKS[pos]))
         # tag current file
         for line_num, line in enumerate(self.vim.current.buffer, start=1):
             doc = nlp(line)

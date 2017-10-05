@@ -23,8 +23,8 @@ class POSHlighter(object):
     def __init__(self, vim):
         self.vim = vim
 
-    @neovim.function('Verb')
-    def verb(self, allowed_pos):
+    @neovim.function('POSHighlight')
+    def pos_highlight(self, allowed_pos):
         if len(allowed_pos) == 0:
             allowed_pos = set(['verb'])
         else:
